@@ -1,2 +1,4 @@
 # stack uses this directory for build artifacts
 /.stack-work/
+
+stack.yaml.lock
