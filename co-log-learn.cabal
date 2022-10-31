@@ -74,6 +74,7 @@ executable co-log-learn
     src/app
   build-depends:
       base >=3 && <5
+    , co-log-core
     , co-log-learn
 
 test-suite basic-wrk-test-suite
