@@ -74,8 +74,10 @@ executable co-log-learn
     src/app
   build-depends:
       base >=3 && <5
+    , co-log
     , co-log-core
     , co-log-learn
+    , text
 
 test-suite basic-wrk-test-suite
   import: lang
