@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 import Colog (cmap, logStringStdout)
 import Colog.Actions (logTextStdout)
 import Colog.Core.Action ((<&), LogAction, unLogAction)
