@@ -30,21 +30,28 @@ import Prelude hiding (log)
 
 example0 :: IO ()
 example0 = do
-  putStrLn "Example 0: First message, simple putStrLn"
-  putStrLn "Example 0: Second message, simple putStrLn"
+  putStrLn "Example 0: Simple putStrLn, no logging API at all"
+
+  putStrLn "A simple message"
+  putStrLn "Another message"
 
 
 example1 :: LogAction IO String -> IO ()
-example1 logger' = do
-  unLogAction logger' "Example 1: First message, using unLogAction"
-  unLogAction logger' "Example 1: Second message, using unLogAction"
+example1 logger = do
+  putStrLn "\nExample 1: using `unLogAction logger msg`"
+
+  unLogAction logger "A simple message"
+  unLogAction logger "Another message"
+
 
 -- (<&) is an operator version of unLogAction
 
 example2 :: LogAction IO String -> IO ()
-example2 logger' = do
-  logger' <& "Example 2: First message, using the (<&) operator on the logger"
-  logger' <& "Example 2: Second message, using the (<&) operator on the logger"
+example2 logger = do
+  putStrLn "\nExample 2: using `logger <& msg`"
+
+  logger <& "A simple message"
+  logger <& "Another message"
 
 
 -- Here's a more practical example with log severities and even call stack info
@@ -65,6 +72,7 @@ fmtCustom :: Message -> Text
 fmtCustom (Msg sev@Debug stack msg) = showSeverity' sev <> showSourceLoc stack <> msg
 fmtCustom (Msg sev       _     msg) = showSeverity' sev <> msg
 
+-- A simple helper function that should probably be in the text package already!
 showText :: Show a => a -> Text
 showText = pack . show
 
@@ -78,20 +86,34 @@ exampleN exNum = do
   log E $ "example" <> showText exNum <> ": An error message"
 
 
+example3 :: LogAction IO Message -> IO ()
+example3 logger = do
+  putStrLn "\nExample 3: With usingLoggerT and the stock fmtMessage"
+
+  usingLoggerT logger $ exampleN 3
+
+
+example4 :: LogAction IO Message -> IO ()
+example4 logger = do
+  putStrLn "\nExample 4: With usingLoggerT and a custom message formatter"
+
+  usingLoggerT logger $ exampleN 4
+
+
+example5 :: LogAction IO Message -> IO ()
+example5 logger = do
+  putStrLn "\nExample 5: With usingLoggerT and a logger which filters for Warning or higher"
+
+  usingLoggerT logger $ exampleN 5
+
+
 main :: IO ()
 main = do
   example0
-
-  let logger1 = logStringStdout
-
-  example1 logger1
-  example2 logger1
-
-  let logger3 = cmap fmtMessage logTextStdout
-  usingLoggerT logger3 $ exampleN 3
-
-  let logger4 = cmap fmtCustom logTextStdout
-  usingLoggerT logger4 $ exampleN 4
+  example1 logStringStdout
+  example2 logStringStdout
+  example3 $ cmap fmtMessage logTextStdout
+  example4 $ cmap fmtCustom logTextStdout
 
   -- Beware, more recent docs show examples using filterBySeverity with the
   -- WithSeverity type but I had problems composing this type with the
@@ -100,4 +122,4 @@ main = do
   -- to not use the WithSeverity data type here.
 
   let logger5 = filterBySeverity Warning msgSeverity . cmap fmtMessage $ logTextStdout
-  usingLoggerT logger5 $ exampleN 5
+  example5 logger5
