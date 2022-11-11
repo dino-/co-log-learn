@@ -1,12 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE PatternSynonyms #-}
 
 import Colog (cmap, logStringStdout)
 import Colog.Actions (logTextStdout)
 import Colog.Core.Action ((<&), LogAction, unLogAction)
-import Colog.Core.Severity (Severity(..))
-import Colog.Message (Message, Msg(..), fmtMessage, logDebug, logError, logInfo, logWarning, showSourceLoc)
+import Colog.Core.Severity (pattern E, pattern I, Severity(..))
+import Colog.Message (Message, Msg(..), fmtMessage, log, logDebug, logWarning, showSourceLoc)
 import Colog.Monad (LoggerT, usingLoggerT)
 import Data.Text (Text, pack)
+import Prelude hiding (log)
 
 
 -- This is what the LogAction type looks like
@@ -56,12 +58,14 @@ fmtCustom (Msg sev       _     msg) = showSeverity' sev <> msg
 showText :: Show a => a -> Text
 showText = pack . show
 
+-- Note our pattern matching above in showSeverity' works whether we use the PatternSynonym or not
+
 exampleN :: Int -> LoggerT Message IO ()
 exampleN exNum = do
   logDebug $ "example" <> showText exNum <> ": A debug message"
-  logInfo $ "example" <> showText exNum <> ": This is an info message"
+  log I $ "example" <> showText exNum <> ": This is an info message"
   logWarning $ "example" <> showText exNum <> ": A warning message"
-  logError $ "example" <> showText exNum <> ": An error message"
+  log E $ "example" <> showText exNum <> ": An error message"
 
 
 main :: IO ()
