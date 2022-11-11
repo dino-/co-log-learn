@@ -4,8 +4,18 @@
 import Colog (cmap, logStringStdout)
 import Colog.Actions (logTextStdout)
 import Colog.Core.Action ((<&), LogAction, unLogAction)
-import Colog.Core.Severity (pattern E, pattern I, Severity(..))
-import Colog.Message (Message, Msg(..), fmtMessage, log, logDebug, logWarning, showSourceLoc)
+import Colog.Core.Severity
+  ( pattern E, pattern I
+  , Severity(Debug, Info, Warning, Error)
+  , filterBySeverity
+  )
+import Colog.Message
+  ( Message, Msg(..)
+  , fmtMessage
+  , log, logDebug, logWarning
+  , msgSeverity
+  , showSourceLoc
+  )
 import Colog.Monad (LoggerT, usingLoggerT)
 import Data.Text (Text, pack)
 import Prelude hiding (log)
@@ -77,8 +87,17 @@ main = do
   example1 logger1
   example2 logger1
 
-  let logger2 = cmap fmtMessage logTextStdout
-  usingLoggerT logger2 $ exampleN 3
+  let logger3 = cmap fmtMessage logTextStdout
+  usingLoggerT logger3 $ exampleN 3
 
-  let logger3 = cmap fmtCustom logTextStdout
-  usingLoggerT logger3 $ exampleN 4
+  let logger4 = cmap fmtCustom logTextStdout
+  usingLoggerT logger4 $ exampleN 4
+
+  -- Beware, more recent docs show examples using filterBySeverity with the
+  -- WithSeverity type but I had problems composing this type with the
+  -- formatting code from earlier examples which contain a simple
+  -- `type Message = Msg Severity` instead. My solution for this exercise was
+  -- to not use the WithSeverity data type here.
+
+  let logger5 = filterBySeverity Warning msgSeverity . cmap fmtMessage $ logTextStdout
+  usingLoggerT logger5 $ exampleN 5
