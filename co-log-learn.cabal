@@ -2,10 +2,11 @@ cabal-version: 2.2
 
 name: co-log-learn
 version: 1.0
--- synopsis:
--- description:
+synopsis: Learning the co-log libraries
+description: A project to explore the co-log libraries and learn how they work.
+  Work may be done here on helper modules for co-log as well.
 author: Dino Morelli
-maintainer: dino.morelli@iohk.io
+maintainer: dino@ui3.info
 copyright: 2022 Dino Morelli
 category: Unclassified
 license: ISC
@@ -19,7 +20,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/dino-iog/co-log-learn
+  location: https://github.com/dino-/co-log-learn
 
 common lang
   default-language: Haskell2010
