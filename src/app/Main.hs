@@ -110,6 +110,9 @@ example5 logger = do
 main :: IO ()
 main = do
   example0
+
+  -- In each of these cases, we're passing the LogAction (the logger) in
+
   example1 logStringStdout
   example2 logStringStdout
   example3 $ cmap fmtMessage logTextStdout
