@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE PatternSynonyms #-}
-
 import Colog (cmap, logStringStdout)
 import Colog.Actions (logTextStdout)
 import Colog.Core.Action ((<&), LogAction, unLogAction)
@@ -19,6 +16,8 @@ import Colog.Message
 import Colog.Monad (LoggerT, usingLoggerT)
 import Data.Text (Text, pack)
 import Prelude hiding (log)
+
+import CologLearn.Trans
 
 
 -- This is what the LogAction type looks like
@@ -126,3 +125,8 @@ main = do
 
   let logger5 = filterBySeverity Warning msgSeverity . cmap fmtMessage $ logTextStdout
   example5 logger5
+
+  let logger6 = cmap fmtMessage logTextStdout
+  let env = Env 42 logger6
+  runApp env $ do
+    example6
