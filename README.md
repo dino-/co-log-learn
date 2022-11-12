@@ -8,8 +8,7 @@ Learning the co-log libraries
 
 ## Description
 
-A project to explore the co-log libraries and learn how they work. Work may be
-done here on helper modules for co-log as well.
+A project to explore the co-log libraries and learn how they work.
 
 
 ## Getting source

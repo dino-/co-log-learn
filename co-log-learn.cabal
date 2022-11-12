@@ -64,19 +64,3 @@ executable co-log-learn
     , co-log-core
     , co-log-learn
     , text
-
-test-suite basic-wrk-test-suite
-  import: lang
-  type: exitcode-stdio-1.0
-  main-is: Main.hs
-  -- other-modules:
-  --     Paths_fixme
-  hs-source-dirs:
-    src/test
-  ghc-options: -rtsopts -threaded -with-rtsopts=-N
-  build-depends:
-      base >=3 && <5
-    , co-log-learn
-    , tasty
-    , tasty-hunit
-    , tasty-quickcheck
